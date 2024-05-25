@@ -1,6 +1,6 @@
 import http from 'node:http'
-// adicionar 'type': 'module' no package.json para poder usar o modelo import e não require
-// utilizar o prefixo node: antes de importar módulos internos do node
+// adicionar 'type': '[module]' no package.json para poder usar o modelo import e não require
+// utilizar o prefixo 'node:' antes de importar módulos internos do node
 
 //  - HTTP
 //    - Método HTTP
@@ -19,13 +19,30 @@ import http from 'node:http'
 // GET/users => Buscando usuários do back-end
 // POST/users => Criando um usuário no back-end
 
-const server = http.createServer((req, res) => {
+// Stateful - Stateless
 
+// Cabeçalhos(req/res) => Metadados
+
+const users = []
+
+const server = http.createServer((req,
+                                  res) => {
     const {method, url} = req
 
-    if(method === 'GET' && url === '/users'){
-        return res.end('Listagem de usuários') //Early return
-    }if(method === 'POST' && url === '/users'){
+    console.log(req.headers)
+
+    if (method === 'GET' && url === '/users') {
+        return res
+            .setHeader('Content-Type', 'application/json')
+            .end(JSON.stringify(users)) //Early return
+    }
+
+    if (method === 'POST' && url === '/users') {
+        users.push({
+            id: 1,
+            name: 'Fulano',
+            email: 'fulano@email.com',
+        })
         return res.end('Criação de usuário')
     }
 
