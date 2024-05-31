@@ -1,4 +1,5 @@
 import http from 'node:http'
+import {randomUUID} from 'node:crypto'
 import {json} from "./middlewares/json.js";
 import {Database} from "./database.js";
 // adicionar 'type': '[module]' no package.json para poder usar o modelo import e não require
@@ -45,9 +46,9 @@ const server = http.createServer(async (req,
         const {name, email} = req.body
 
         const user = {
-            id: 1,
-            name: 'Fulano',
-            email: 'fulano@email.com',
+            id: randomUUID(),
+            name,
+            email,
         }
 
         database.insert('users', user)
