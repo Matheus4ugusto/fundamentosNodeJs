@@ -1,5 +1,6 @@
 import http from 'node:http'
 import {json} from "./middlewares/json.js";
+import {Database} from "./database.js";
 // adicionar 'type': '[module]' no package.json para poder usar o modelo import e não require
 // utilizar o prefixo 'node:' antes de importar módulos internos do node
 
@@ -24,7 +25,7 @@ import {json} from "./middlewares/json.js";
 
 // Cabeçalhos(req/res) => Metadados
 
-const users = []
+const database = new Database()
 
 const server = http.createServer(async (req,
                                         res) => {
@@ -34,6 +35,8 @@ const server = http.createServer(async (req,
 
     if (method === 'GET' && url === '/users') {
 
+        const users = database.select('users')
+
         return res.end(JSON.stringify(users)) //Early return
     }
 
@@ -41,11 +44,14 @@ const server = http.createServer(async (req,
 
         const {name, email} = req.body
 
-        users.push({
+        const user = {
             id: 1,
             name: 'Fulano',
             email: 'fulano@email.com',
-        })
+        }
+
+        database.insert('users', user)
+
         return res.writeHead(201).end()
     }
 
