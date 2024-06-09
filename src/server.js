@@ -3,6 +3,7 @@ import {randomUUID} from 'node:crypto'
 import {json} from "./middlewares/json.js";
 import {Database} from "./database.js";
 import {routes} from "./routes.js";
+import {extractQueryParams} from "./utils/extract-query-params.js";
 // adicionar 'type': '[module]' no package.json para poder usar o modelo import e não require
 // utilizar o prefixo 'node:' antes de importar módulos internos do node
 
@@ -45,7 +46,11 @@ const server = http.createServer(async (req,
     if (route) {
         const routeParams = req.url.match(route.path)
 
-        req.params = {...routeParams.groups}
+        const {query, ...params} = routeParams.groups
+
+        req.params = params
+        req.query = query ? extractQueryParams(query) : {}
+
 
         return route.handler(req, res)
     }
