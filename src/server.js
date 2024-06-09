@@ -27,6 +27,10 @@ import {routes} from "./routes.js";
 
 // Cabeçalhos(req/res) => Metadados
 
+// Query Parameters: Aparecem na url / URL Stateful => filtros, paginação, não obrigatórios
+// Route Parameters: Aparecem na URL / identificação de recurso
+// Request Body: Envio de informações (HTTP)
+
 
 const server = http.createServer(async (req,
                                         res) => {
